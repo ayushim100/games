@@ -1,24 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Contact from './components/contact';
+import Header from './components/header';
+import React, { useState } from "react";
+import DashBoard from './pages/dashboard';
 
 function App() {
+  const [activeComponent, setActiveComponent] = useState<string>('VideoGames');
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header activeComponent={activeComponent} setActiveComponent={setActiveComponent}></Header>
+      {activeComponent === "Contact" && (
+        <Contact/>
+      )}
+      {activeComponent === "VideoGames" && (
+        <DashBoard/>
+      )}
     </div>
   );
 }
