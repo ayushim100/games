@@ -26,7 +26,7 @@ const DashBoard: React.FC = () => {
 
   const [filteredGames, setFilteredGames] = useState<Game[]>([]);
 
-  const fetchGames = async ({page, pageSize}: FetchParams) => {
+  const fetchGames = async ({ page, pageSize }: FetchParams) => {
     setLoading(true);
     setError(null);
 
@@ -54,13 +54,25 @@ const DashBoard: React.FC = () => {
     }
 
     if (minScore !== "" && minScore > 0) {
-      filtered = filtered.filter((game) => parseFloat(game.attributes.rating) >= minScore);
+      filtered = filtered.filter(
+        (game) => parseFloat(game.attributes.rating) >= minScore
+      );
     }
 
     filtered = filtered.sort((a, b) => {
-      const aValue = orderBy === "Release Date" ? new Date(a.attributes.firstReleaseDate).getTime() : orderBy === "Score" ? parseFloat(a.attributes.rating) : a.attributes.name.toLowerCase();
-      const bValue = orderBy === "Release Date" ? new Date(b.attributes.firstReleaseDate).getTime() : orderBy === "Score" ? parseFloat(b.attributes.rating) : b.attributes.name.toLowerCase();
-      return ascending ? (aValue > bValue ? 1 : -1) : (aValue < bValue ? 1 : -1);
+      const aValue =
+        orderBy === "Release Date"
+          ? new Date(a.attributes.firstReleaseDate).getTime()
+          : orderBy === "Score"
+          ? parseFloat(a.attributes.rating)
+          : a.attributes.name.toLowerCase();
+      const bValue =
+        orderBy === "Release Date"
+          ? new Date(b.attributes.firstReleaseDate).getTime()
+          : orderBy === "Score"
+          ? parseFloat(b.attributes.rating)
+          : b.attributes.name.toLowerCase();
+      return ascending ? (aValue > bValue ? 1 : -1) : aValue < bValue ? 1 : -1;
     });
 
     setFilteredGames(filtered);
@@ -74,26 +86,26 @@ const DashBoard: React.FC = () => {
     setFilteredGames(games); // Reset to original games
   };
 
-//   const handleFilterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     fetchGames({ page, pageSize, filterName });
-//   };
+  //   const handleFilterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //     e.preventDefault();
+  //     fetchGames({ page, pageSize, filterName });
+  //   };
 
-//   useEffect(() => {
-//     fetchGames({ page, pageSize });
-//   }, [page, pageSize]);
+  //   useEffect(() => {
+  //     fetchGames({ page, pageSize });
+  //   }, [page, pageSize]);
 
-  useEffect(()=>{
-    console.log("Start")
-    fetchGames({page, pageSize});
-  },[])
+  useEffect(() => {
+    console.log("Start");
+    fetchGames({ page, pageSize });
+  }, []);
 
   useEffect(() => {
     applyFilters();
   }, [filterName, minScore, orderBy, ascending]);
 
   return (
-    <div className="p-4 flex lg:flex-row">
+    <div>
       {/* <form onSubmit={handleFilterSubmit} className="mb-4">
         <input
           type="text"
@@ -123,53 +135,70 @@ const DashBoard: React.FC = () => {
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
       {loading && <div>Loading...</div>}
-      {!loading && (
-        <div className="p-4 flex lg:flex-row">
-          <div className="bg-[#0e1a2b] p-6 rounded-lg">
+      {!loading && !error && (
+        <div className="p-4 flex flex-col lg:flex-row gap-x-1">
+          <div className="bg-[#0e1a2b] p-6 rounded-lg mb-4 max-h-96">
             <h4 className="text-white font-montserrat font-semibold text-left text-xl mb-4">
               Filter Results
             </h4>
-
-            <input
-              type="text"
-              placeholder="Name (contains)"
-              value={filterName}
-              onChange={(e) => setFilterName(e.target.value)}
-              className="border border-[#c1d1e8] bg-[#182c47] text-[#c1d1e8] p-2 mb-4"
-            />
-
-            <input
-              type="number"
-              placeholder="Minimum Score"
-              value={minScore}
-              onChange={(e) =>
-                setMinScore(e.target.value ? Number(e.target.value) : "")
-              }
-              className="border border-[#c1d1e8] bg-[#182c47] text-[#c1d1e8] p-2 mb-4"
-              min="0"
-            />
-
-            <div className="flex flex-col md:flex-row md:items-center">
-              <button
-                onClick={() => setAscending(!ascending)}
-                className="text-white mr-2"
+            <div className="mb-4 flex flex-col">
+              <label
+                htmlFor="filterName"
+                className="text-[#c1d1e8] font-mulish text-left flex "
               >
-                {ascending ? "⬆️" : "⬇️"}
-              </button>
+                Name
+              </label>
+              <input
+                type="text"
+                placeholder="Name (contains)"
+                value={filterName}
+                onChange={(e) => setFilterName(e.target.value)}
+                className="border border-[#c1d1e8] bg-[#182c47] text-[#c1d1e8] p-2 mb-4 items-start"
+              />
+            </div>
 
-              <select
-                value={orderBy}
-                onChange={(e) => setOrderBy(e.target.value)}
-                className="border border-[#c1d1e8] bg-[#182c47] text-[#c1d1e8] p-2 mb-4 md:mb-0"
+            <div className="mb-4 flex flex-col">
+              <label
+                htmlFor="minScore"
+                className="text-[#c1d1e8] font-mulish text-left flex "
               >
-                <option value="Release Date">Release Date</option>
-                <option value="Score">Score</option>
-                <option value="Name">Name</option>
-              </select>
+                Minimum Score
+              </label>
+              <input
+                type="number"
+                placeholder="Minimum Score"
+                value={minScore}
+                onChange={(e) =>
+                  setMinScore(e.target.value ? Number(e.target.value) : "")
+                }
+                className="border border-[#c1d1e8] bg-[#182c47] text-[#c1d1e8] p-2 mb-4"
+                min="0"
+              />
+            </div>
+
+            <div className="flex flex-col lg:flex-col md:flex-row gap-4">
+              <div className="flex flex-row w-full">
+                <button
+                  onClick={() => setAscending(!ascending)}
+                  className="text-white mr-2 text-2xl"
+                >
+                  {ascending ? "⬆️" : "⬇️"}
+                </button>
+
+                <select
+                  value={orderBy}
+                  onChange={(e) => setOrderBy(e.target.value)}
+                  className="border border-[#c1d1e8] bg-[#182c47] text-[#c1d1e8] p-2 mb-4 md:mb-0 flex-grow-1 w-full"
+                >
+                  <option value="Release Date">Release Date</option>
+                  <option value="Score">Score</option>
+                  <option value="Name">Name</option>
+                </select>
+              </div>
 
               <button
                 onClick={clearFilters}
-                className="bg-[#5692e8] text-white font-montserrat font-semibold px-4 py-2 ml-2"
+                className="bg-[#5692e8] text-white font-montserrat font-semibold px-4 py-2"
               >
                 Clear
               </button>
