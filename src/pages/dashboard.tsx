@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import GameDetails from "../interfaces/GameDetails";
 import Game from "../interfaces/Game";
 import ApiResponse from "../interfaces/ApiResponse";
 import GameItem from "../components/gameItem";
+import data from "../data";
 
 interface FetchParams {
   page?: number;
@@ -39,7 +39,21 @@ const DashBoard: React.FC = () => {
       setGames(response.data.data);
       setFilteredGames(response.data.data);
     } catch (error: any) {
-      setError("Failed to fetch data");
+      const transformedData: Game[] = data.data.map(game => ({
+        id: game.id,
+        attributes: {
+          firstReleaseDate: game.attributes.firstReleaseDate,
+          name: game.attributes.name,
+          rating: game.attributes.rating.toString(),
+          summary: game.attributes.summary,
+          createdAt: game.attributes.createdAt,
+          updatedAt: game.attributes.updatedAt,
+          publishedAt: game.attributes.publishedAt,
+        }
+      }));
+      setGames(transformedData)
+      setFilteredGames(transformedData)
+      //setError("Failed to fetch data");
     } finally {
       setLoading(false);
     }
