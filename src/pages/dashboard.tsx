@@ -3,7 +3,7 @@ import axios from "axios";
 import Game from "../interfaces/Game";
 import ApiResponse from "../interfaces/ApiResponse";
 import GameItem from "../components/gameItem";
-import data from "../data";
+import data from "../FirstHealth/data";
 
 interface FetchParams {
   page?: number;

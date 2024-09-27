@@ -1,21 +1,10 @@
 import './App.css';
-import Contact from './components/contact';
-import Header from './components/header';
-import React, { useState } from "react";
-import DashBoard from './pages/dashboard';
 
 function App() {
-  const [activeComponent, setActiveComponent] = useState<string>('VideoGames');
   return (
-    <div className="App">
-      <Header activeComponent={activeComponent} setActiveComponent={setActiveComponent}></Header>
-      {activeComponent === "Contact" && (
-        <Contact/>
-      )}
-      {activeComponent === "VideoGames" && (
-        <DashBoard/>
-      )}
-    </div>
+    <h1 className="text-3xl font-bold underline text-red-600">
+      Simple React Typescript Tailwind Sample
+    </h1>
   );
 }
 
